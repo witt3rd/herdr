@@ -42,6 +42,7 @@ pub struct AgentDetection {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Agent {
     Pi,
+    Prime,
     Claude,
     Codex,
     Gemini,
@@ -68,6 +69,7 @@ pub enum Agent {
 impl Agent {
     pub const ALL: [Self; 22] = [
         Self::Pi,
+        Self::Prime,
         Self::Claude,
         Self::Codex,
         Self::Gemini,
@@ -118,6 +120,7 @@ impl Agent {
 pub fn agent_label(agent: Agent) -> &'static str {
     match agent {
         Agent::Pi => "pi",
+        Agent::Prime => "prime-agent",
         Agent::Claude => "claude",
         Agent::Codex => "codex",
         Agent::Gemini => "gemini",
@@ -145,6 +148,7 @@ pub fn agent_label(agent: Agent) -> &'static str {
 pub fn interactive_agent_executable(agent: Agent) -> &'static str {
     match agent {
         Agent::Pi => "pi",
+        Agent::Prime => "prime-agent",
         Agent::Claude => "claude",
         Agent::Codex => "codex",
         Agent::Gemini => "gemini",
@@ -188,6 +192,7 @@ pub(crate) fn parse_canonical_agent_label(label: &str) -> Option<Agent> {
 fn lookup_agent(name: &str) -> Option<Agent> {
     match name {
         "pi" => Some(Agent::Pi),
+        "prime-agent" | "prime" => Some(Agent::Prime),
         "claude" | "claude-code" => Some(Agent::Claude),
         "codex" => Some(Agent::Codex),
         "gemini" => Some(Agent::Gemini),
@@ -734,6 +739,7 @@ mod tests {
         assert_eq!(identify_agent("qwen"), Some(Agent::Qwen));
         assert_eq!(identify_agent("Qwen Code"), Some(Agent::Qwen));
         assert_eq!(identify_agent("maki"), Some(Agent::Maki));
+        assert_eq!(identify_agent("prime-agent"), Some(Agent::Prime));
     }
 
     #[test]
@@ -776,6 +782,7 @@ mod tests {
     fn every_agent_has_a_canonical_interactive_executable() {
         let expected = [
             (Agent::Pi, "pi"),
+            (Agent::Prime, "prime-agent"),
             (Agent::Claude, "claude"),
             (Agent::Codex, "codex"),
             (Agent::Gemini, "gemini"),
